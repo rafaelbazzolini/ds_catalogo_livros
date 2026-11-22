@@ -1,0 +1,21 @@
+# Raiz do subdomínio: www/desafiolivros
+Options -Indexes -MultiViews
+DirectoryIndex index.php
+
+<FilesMatch "(?i)^(\.|composer\.(json|lock)$|phpunit\.xml$)">
+    Require all denied
+</FilesMatch>
+
+RewriteEngine On
+
+# Impede acesso direto aos arquivos da aplicação.
+RewriteRule (^|/)\.(?!well-known(?:/|$)) - [F,L]
+RewriteRule ^(?:bin|config|docker|docs|scripts|sql|src|templates|tests|var|vendor)(?:/|$) - [F,L,NC]
+RewriteRule ^(?:compose(?:\.[^/]+)?\.ya?ml|README\.md)$ - [F,L,NC]
+
+# Preserva a validação de certificados e evita reescrita repetida.
+RewriteRule ^\.well-known(?:/|$) - [L]
+RewriteRule ^public(?:/|$) - [L]
+
+# Expõe somente a pasta pública do Symfony.
+RewriteRule ^(.*)$ public/$1 [L]
