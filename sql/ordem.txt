@@ -1,0 +1,7 @@
+Autor.sql
+Assunto.sql
+Livro.sql
+Livro_Autor.sql
+Livro_Assunto.sql
+Livro_status.sql
+vw_livros_por_autor.sql

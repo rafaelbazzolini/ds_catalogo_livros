@@ -1,0 +1,22 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: catalogo-livros-app
+    ports:
+      - '127.0.0.1:8088:80'
+    volumes:
+      - .:/var/www/html
+      - dependencies:/var/www/html/vendor
+      - runtime:/var/www/html/var
+    restart: unless-stopped
+    networks:
+      - database
+networks:
+  database:
+    external: true
+    name: wad_network
+volumes:
+  dependencies:
+  runtime:

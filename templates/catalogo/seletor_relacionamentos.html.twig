@@ -1,0 +1,39 @@
+{# Carrega somente os vínculos selecionados; a busca consulta o servidor. #}
+<details class="relation-section" data-relation="{{ tipo }}" data-search-url="{{ path('catalog_options', {tipo: tipo}) }}">
+    <summary class="relation-heading">
+        <span>{{ rotulo }} <span class="relation-count">{{ selecionados|length }}</span>
+        </span>
+        <span class="relation-actions">
+            <button class="btn btn-sm btn-outline-secondary quick-add-button" type="button" aria-label="Adicionar {{ singular }}" title="Adicionar {{ singular }}" data-quick-create="{{ tipo }}" data-title="Adicionar {{ singular }}" data-label="{{ tipo == 'autores' ? 'Nome' : 'Descrição' }}" data-field="{{ campo }}" data-max="{{ limite }}" data-url="{{ path('catalog_quick_create', {tipo: tipo}) }}" data-token="{{ csrf_token('save_' ~ tipo) }}">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+                    <path d="M12 5v14M5 12h14"/>
+                </svg>
+            </button>
+            <span class="relation-chevron" aria-hidden="true">
+            </span>
+        </span>
+    </summary>
+    <div class="relation-content">
+        <div class="selected-relations" aria-label="{{ rotulo }} selecionados">
+            {% for item in selecionados %}
+            <span class="selected-item" data-id="{{ attribute(item, identificador) }}" data-label="{{ attribute(item, campo) }}">
+                <input type="hidden" name="{{ tipo }}[]" value="{{ attribute(item, identificador) }}">
+                <span>{{ attribute(item, campo) }}</span>
+                <button type="button" aria-label="Remover {{ attribute(item, campo) }}">×</button>
+            </span>
+            {% endfor %}
+        </div>
+        <div class="relation-search">
+            <label class="visually-hidden" for="search-{{ tipo }}">Pesquisar {{ rotulo|lower }}</label>
+            <input class="form-control" id="search-{{ tipo }}" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="results-{{ tipo }}" autocomplete="off" placeholder="Digite para pesquisar {{ rotulo|lower }}">
+            <div class="relation-dropdown" hidden>
+                <div class="relation-results" id="results-{{ tipo }}" role="listbox" aria-label="Resultados de {{ rotulo|lower }}" aria-multiselectable="true">
+                </div>
+                <p class="relation-feedback" role="status">
+                </p>
+                <button class="relation-more" type="button" hidden>Carregar mais</button>
+            </div>
+        </div>
+        <p class="form-text mb-0">Selecione um ou mais {{ rotulo|lower }}.</p>
+    </div>
+</details>

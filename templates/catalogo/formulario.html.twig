@@ -1,0 +1,76 @@
+{# Criação e edição compartilham os mesmos campos. #}
+{% extends 'base.html.twig' %}
+{% block body %}
+<div class="form-heading">
+    <a class="btn btn-outline-secondary back-button" href="{{ path('catalog_list', {tipo}) }}">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m12 5-7 7 7 7M5 12h14"/>
+        </svg>{{ metadados.label }}</a>
+    <h1>{{ id ? 'Editar' : 'Adicionar' }} {{ tipo == 'livros' ? 'livro' : (tipo == 'autores' ? 'autor' : 'assunto') }}</h1>
+</div>
+{% if erros %}
+<div class="alert alert-danger" role="alert">
+    <strong>Confira os campos informados.</strong>
+    <ul class="mb-0">
+        {% for erro in erros %}
+        <li>{{ erro }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+<form method="post" class="panel p-4 edit-form">
+    <input type="hidden" name="_token" value="{{ csrf_token('save_' ~ tipo) }}">
+    <p class="small text-secondary">Todos os campos são obrigatórios.</p>
+    <div class="mb-3">
+        <label for="main" class="form-label">{{ tipo == 'livros' ? 'Título' : (tipo == 'autores' ? 'Nome' : 'Descrição') }}</label>
+        <input id="main" class="form-control" name="{{ metadados.field }}" value="{{ attribute(dados, metadados.field)|default('') }}" maxlength="{{ metadados.max }}" required autofocus>
+    </div>
+    {% if tipo == 'livros' %}
+    <div class="row">
+        <div class="col-md-8 mb-3">
+            <label class="form-label" for="publisher">Editora</label>
+            <input class="form-control" id="publisher" name="Editora" maxlength="40" value="{{ dados.Editora|default('') }}" required>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label class="form-label" for="status">Status</label>
+            <select class="form-select status-select" id="status" name="Status" required>
+                <option value="disponivel" {{ dados.Status|default('disponivel') == 'disponivel' ? 'selected' : '' }}>Disponível</option>
+                <option value="indisponivel" {{ dados.Status|default('disponivel') == 'indisponivel' ? 'selected' : '' }}>Indisponível</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label class="form-label" for="edition">Edição</label>
+            <input class="form-control" id="edition" name="Edicao" type="number" min="1" max="999999999" value="{{ dados.Edicao|default('') }}" required>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label class="form-label" for="year">Ano de publicação</label>
+            <input class="form-control" id="year" name="AnoPublicacao" inputmode="numeric" pattern="[1-9][0-9]{3}" maxlength="4" value="{{ dados.AnoPublicacao|default('') }}" required>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label class="form-label" for="price">Valor (R$)</label>
+            <input class="form-control" id="price" name="Valor" inputmode="decimal" placeholder="0,00" value="{{ dados.Valor|default('') }}" required>
+            <div class="form-text">Exemplo: 1.234,56</div>
+        </div>
+    </div>
+    <div class="relation-groups">
+        {% include 'catalogo/seletor_relacionamentos.html.twig' with {tipo: 'autores', rotulo: 'Autores', singular: 'autor', campo: 'Nome', identificador: 'CodAu', limite: 40, selecionados: autores} %}
+        {% include 'catalogo/seletor_relacionamentos.html.twig' with {tipo: 'assuntos', rotulo: 'Assuntos', singular: 'assunto', campo: 'Descricao', identificador: 'codAs', limite: 20, selecionados: assuntos} %}
+    </div>
+    {% endif %}
+    <div class="d-flex gap-2 border-top pt-3">
+        <button class="btn btn-primary save-button">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12l4 4v12a2 2 0 0 1-2 2Z"/>
+                <path d="M7 3v6h10V3M7 21v-8h10v8"/>
+            </svg>
+            <span>Salvar</span>
+        </button>
+        <a class="btn btn-outline-secondary" href="{{ path('catalog_list', {tipo}) }}">Cancelar</a>
+    </div>
+</form>
+{% if tipo == 'livros' %}
+{% include 'catalogo/cadastro_rapido.html.twig' %}
+{% endif %}
+{% endblock %}

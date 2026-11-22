@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<div class="d-flex justify-content-between mb-4">
+    <div>
+        <p class="eyebrow">RELATÓRIOS</p>
+        <h1>Livros por autor</h1>
+        <p class="text-secondary">Emitido em {{ geradoEm|date('d/m/Y H:i', 'America/Sao_Paulo') }} · Um livro com vários autores aparece em cada grupo correspondente.</p>
+    </div>
+    <div>
+        <a class="btn btn-primary" href="{{ path('report', {format: 'pdf'}) }}">Baixar PDF</a>
+    </div>
+</div>
+<div class="panel p-4">
+    {% include 'relatorio/conteudo.html.twig' %}
+</div>
+{% endblock %}

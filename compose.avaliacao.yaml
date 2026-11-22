@@ -1,0 +1,46 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    ports:
+      - '127.0.0.1:${APP_PORT:-8080}:80'
+    environment:
+      APP_ENV: dev
+      APP_DEBUG: '1'
+      APP_SECRET: '${APP_SECRET:?Preencha APP_SECRET no arquivo de ambiente}'
+      DB_HOST: banco
+      DB_PORT: '3306'
+      DB_DATABASE: '${DB_DATABASE:-catalogo_livros}'
+      DB_USERNAME: '${DB_USERNAME:-catalogo_app}'
+      DB_PASSWORD: '${DB_PASSWORD:?Preencha DB_PASSWORD no arquivo de ambiente}'
+      DB_CHARSET: utf8mb4
+    depends_on:
+      banco:
+        condition: service_healthy
+
+  banco:
+    image: mariadb:10.11
+    environment:
+      MARIADB_DATABASE: '${DB_DATABASE:-catalogo_livros}'
+      MARIADB_USER: '${DB_USERNAME:-catalogo_app}'
+      MARIADB_PASSWORD: '${DB_PASSWORD:?Preencha DB_PASSWORD no arquivo de ambiente}'
+      MARIADB_RANDOM_ROOT_PASSWORD: '1'
+    volumes:
+      - dados:/var/lib/mysql
+      - ./sql/Autor.sql:/docker-entrypoint-initdb.d/01_autor.sql:ro
+      - ./sql/Assunto.sql:/docker-entrypoint-initdb.d/02_assunto.sql:ro
+      - ./sql/Livro.sql:/docker-entrypoint-initdb.d/03_livro.sql:ro
+      - ./sql/Livro_Autor.sql:/docker-entrypoint-initdb.d/04_livro_autor.sql:ro
+      - ./sql/Livro_Assunto.sql:/docker-entrypoint-initdb.d/05_livro_assunto.sql:ro
+      - ./sql/Livro_status.sql:/docker-entrypoint-initdb.d/06_livro_status.sql:ro
+      - ./sql/vw_livros_por_autor.sql:/docker-entrypoint-initdb.d/07_relatorio.sql:ro
+    healthcheck:
+      test: ['CMD', 'healthcheck.sh', '--connect', '--innodb_initialized']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 15s
+
+volumes:
+  dados:

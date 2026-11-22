@@ -1,0 +1,78 @@
+{% import 'componentes/icones.html.twig' as icones %}
+<!doctype html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>
+            {% block title %}Catálogo de livros{% endblock %}
+        </title>
+        <link rel="stylesheet" href="/assets/bootstrap.min.css">
+        <link rel="stylesheet" href="/assets/app.css">
+        <script src="/assets/select.js" defer>
+        </script>
+        <script src="/assets/navigation.js" defer>
+        </script>
+        <script src="/assets/relation-picker.js" defer>
+        </script>
+        <script src="/assets/quick-create.js" defer>
+        </script>
+    </head>
+    <body>
+        <header class="topbar border-bottom bg-white">
+            <div class="topbar-inner">
+                <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-controls="sidebar" aria-expanded="false">{{ icones.icon('menu') }}</button>
+                <a class="brand" href="{{ path('home') }}">
+                    <svg class="brand-icon" xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M12 5.5C9 3.8 5.5 3.5 2 4.5v15c3.5-1 7-.7 10 1 3-1.7 6.5-2 10-1v-15c-3.5-1-7-.7-10 1Z"/>
+                        <path d="M12 5.5v15M5.5 8.5c1.2-.1 2.3.1 3.5.5M15 9c1.2-.4 2.3-.6 3.5-.5"/>
+                    </svg>Acervo</a>
+                <span class="topbar-caption">Crud de livros</span>
+            </div>
+        </header>
+        <button class="sidebar-overlay" type="button" aria-label="Fechar menu" tabindex="-1" hidden>
+        </button>
+        <aside class="sidebar" id="sidebar">
+            <nav aria-label="Menu principal">
+                <a class="sidebar-link {{ app.request.attributes.get('_route') == 'home' ? 'active' : '' }}" href="{{ path('home') }}" {{ app.request.attributes.get('_route') == 'home' ? 'aria-current="page"' : '' }}>{{ icones.icon('dashboard') }}Dashboard</a>
+                {% for chave, rotulo in {livros: 'Livros', autores: 'Autores', assuntos: 'Assuntos'} %}
+                <a class="sidebar-link {{ tipo|default('') == chave ? 'active' : '' }}" href="{{ path('catalog_list', {tipo: chave}) }}" {{ tipo|default('') == chave ? 'aria-current="page"' : '' }}>{{ icones.icon(chave == 'livros' ? 'livros' : (chave == 'autores' ? 'autores' : 'assuntos')) }}{{ rotulo }}</a>
+                {% endfor %}
+                <a class="sidebar-link {{ app.request.attributes.get('_route') == 'report' ? 'active' : '' }}" href="{{ path('report') }}" {{ app.request.attributes.get('_route') == 'report' ? 'aria-current="page"' : '' }}>{{ icones.icon('report') }}Relatório</a>
+            </nav>
+        </aside>
+        <main class="page-content app-main">
+            <nav aria-label="Caminho de navegação" class="page-breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item">
+                        <a href="{{ path('home') }}">Início</a>
+                    </li>
+                    {% block breadcrumb %}
+                    {% if metadados is defined %}
+                    {% if id is defined %}
+                    <li class="breadcrumb-item">
+                        <a href="{{ path('catalog_list', {tipo}) }}">{{ metadados.label }}</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ id ? 'Editar' : 'Adicionar' }}</li>
+                    {% else %}
+                    <li class="breadcrumb-item active" aria-current="page">{{ metadados.label }}</li>
+                    {% endif %}
+                    {% elseif app.request.attributes.get('_route') == 'report' %}
+                    <li class="breadcrumb-item active" aria-current="page">Relatório por autor</li>
+                    {% endif %}
+                    {% endblock %}
+                </ol>
+            </nav>
+            {% for tipo, mensagens in app.flashes %}
+            {% for mensagem in mensagens %}
+            <div class="alert alert-{{ tipo }}" role="status">{{ mensagem }}</div>
+            {% endfor %}
+            {% endfor %}
+            {% block body %}
+            {% endblock %}
+        </main>
+        <footer class="site-footer text-secondary small">
+            <div class="container">CRUD DE LIVROS</div>
+        </footer>
+    </body>
+</html>

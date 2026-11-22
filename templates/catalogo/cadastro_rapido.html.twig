@@ -1,0 +1,19 @@
+<dialog class="quick-dialog" id="quick-create" aria-labelledby="quick-create-title">
+    <form id="quick-create-form">
+        <div class="quick-dialog-heading">
+            <h2 id="quick-create-title">Adicionar</h2>
+            <button class="dialog-close" type="button" aria-label="Fechar cadastro" data-dialog-close>×</button>
+        </div>
+        <div class="quick-dialog-body">
+            <p class="text-secondary small">O novo cadastro será selecionado no livro.</p>
+            <div class="alert alert-danger small" id="quick-create-error" role="alert" hidden>
+            </div>
+            <label class="form-label" id="quick-create-label" for="quick-create-value">Nome</label>
+            <input class="form-control" id="quick-create-value" required autocomplete="off">
+        </div>
+        <div class="quick-dialog-footer">
+            <button class="btn btn-outline-secondary" type="button" data-dialog-close>Cancelar</button>
+            <button class="btn btn-primary" type="submit">Salvar</button>
+        </div>
+    </form>
+</dialog>

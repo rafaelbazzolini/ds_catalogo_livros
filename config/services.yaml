@@ -1,0 +1,15 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+    App\:
+        resource: '../src/'
+    Doctrine\DBAL\Connection:
+        factory: ['App\Service\ConexaoBanco', 'create']
+        arguments:
+            - '%env(DB_HOST)%'
+            - '%env(int:DB_PORT)%'
+            - '%env(DB_DATABASE)%'
+            - '%env(DB_USERNAME)%'
+            - '%env(DB_PASSWORD)%'
+            - '%env(DB_CHARSET)%'

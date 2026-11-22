@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+{% import 'componentes/icones.html.twig' as icones %}
+{% block title %}Dashboard · Acervo{% endblock %}
+{% block breadcrumb %}
+<li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+{% endblock %}
+{% block body %}
+<div class="list-heading dashboard-heading">
+    <div>
+        <h1>Dashboard</h1>
+    </div>
+    <a class="btn btn-primary add-button" href="{{ path('catalog_new', {tipo: 'livros'}) }}">
+        <span aria-hidden="true">+</span> Adicionar livro</a>
+</div>
+<div class="dashboard-stats">
+    {% for indicador in [
+    {rotulo: 'Livros cadastrados', value: totais.livros, icon: 'livros', tipo: 'livros'},
+    {rotulo: 'Livros disponíveis', value: totais.disponiveis, icon: 'check', tipo: 'livros'},
+    {rotulo: 'Autores', value: totais.autores, icon: 'autores', tipo: 'autores'},
+    {rotulo: 'Assuntos', value: totais.assuntos, icon: 'assuntos', tipo: 'assuntos'}
+    ] %}
+    <a class="panel stat-card" href="{{ path('catalog_list', {tipo: indicador.tipo}) }}">
+        <div class="stat-top">
+            <span>{{ indicador.rotulo }}</span>
+            <span class="stat-icon">{{ icones.icon(indicador.icon) }}</span>
+        </div>
+        <strong>{{ indicador.value }}</strong>
+    </a>
+    {% endfor %}
+</div>
+{% endblock %}

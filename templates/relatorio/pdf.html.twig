@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="utf-8">
+        <style>body{font:11px "DejaVu Sans",sans-serif;color:#243449}h1{font-size:23px}h2{font-size:16px;margin-top:25px;color:#6d4c37}table{border-collapse:collapse;width:100%}th,td{text-align:left;padding:8px;border-bottom:1px solid #ddd}thead{display:table-header-group}tr{page-break-inside:avoid}th{background:#f2ede7}.small{font-size:10px;color:#666}</style>
+    </head>
+    <body>
+        <h1>Livros por autor</h1>
+        <p>Emitido em {{ geradoEm|date('d/m/Y H:i', 'America/Sao_Paulo') }}</p>
+        <p>Livros com mais de um autor são apresentados em cada grupo correspondente.</p>
+        {% include 'relatorio/conteudo.html.twig' %}
+    </body>
+</html>

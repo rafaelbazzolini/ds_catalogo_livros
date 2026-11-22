@@ -1,0 +1,7 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<p class="eyebrow">ERRO {{ status_code }}</p>
+<h1>{{ status_code == 404 ? 'Página não encontrada' : (status_code == 403 ? 'Não foi possível autorizar a operação' : 'Não foi possível concluir a operação') }}</h1>
+<p class="text-secondary">{{ status_code == 404 ? 'O endereço acessado não existe ou o cadastro já foi removido.' : (status_code == 403 ? 'Atualize a página e tente novamente. Sua sessão pode ter expirado.' : 'Tente novamente em alguns instantes. Se o problema persistir, entre em contato com o responsável pelo sistema.') }}</p>
+<a class="btn btn-primary" href="{{ path('home') }}">Voltar ao acervo</a>
+{% endblock %}

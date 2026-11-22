@@ -1,0 +1,35 @@
+{# O mesmo conteúdo é usado na tela e no PDF. #}
+{% for grupo in grupos %}
+<section class="author-group">
+    <h2>{{ grupo.name }}</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Livro</th>
+                <th>Editora</th>
+                <th>Edição</th>
+                <th>Ano</th>
+                <th>Assuntos</th>
+                <th>Valor</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for livro in grupo.livros %}
+            <tr>
+                <td>{{ livro.Titulo }}</td>
+                <td>{{ livro.Editora }}</td>
+                <td>{{ livro.Edicao }}</td>
+                <td>{{ livro.AnoPublicacao }}</td>
+                <td>{{ livro.Assuntos|default('—') }}</td>
+                <td class="text-nowrap">R$ {{ livro.Valor|number_format(2, ',', '.') }}</td>
+                <td>{{ livro.Status == 'disponivel' ? 'Disponível' : 'Indisponível' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <p class="small text-secondary">{{ grupo.livros|length }} livro(s) vinculado(s) ao autor</p>
+</section>
+{% else %}
+<p>Nenhum livro cadastrado para emissão do relatório.</p>
+{% endfor %}
