@@ -401,4 +401,69 @@ document.querySelectorAll('[data-ano]').forEach((campo) => {
     campo.addEventListener('input', () => {
         campo.value = campo.value.replace(/\D/g, '').slice(0, 4);
     });
+
+    const envoltorio = campo.closest('.campo-ano');
+    if (!envoltorio) return;
+    const botao = envoltorio.querySelector('.abrir-anos');
+    const calendario = envoltorio.querySelector('.calendario-anos');
+    const lista = calendario.querySelector('.lista-anos');
+    let decada;
+
+    function fecharCalendario() {
+        calendario.hidden = true;
+        botao.setAttribute('aria-expanded', 'false');
+    }
+
+    function mostrarAnos() {
+        calendario.querySelector('span').textContent = `${decada} – ${decada + 9}`;
+        lista.replaceChildren();
+        for (let ano = decada; ano <= decada + 9; ano += 1) {
+            const opcao = document.createElement('button');
+            opcao.type = 'button';
+            opcao.textContent = ano;
+            opcao.setAttribute('aria-pressed', String(ano === Number(campo.value)));
+            opcao.addEventListener('click', () => {
+                campo.value = ano;
+                campo.dispatchEvent(new Event('input', {bubbles: true}));
+                campo.dispatchEvent(new Event('change', {bubbles: true}));
+                fecharCalendario();
+                campo.focus();
+            });
+            lista.append(opcao);
+        }
+        calendario.querySelector('[data-decada="-1"]').disabled = decada <= 1000;
+        calendario.querySelector('[data-decada="1"]').disabled = decada >= 9990;
+    }
+
+    botao.addEventListener('click', () => {
+        if (!calendario.hidden) {
+            fecharCalendario();
+            return;
+        }
+        const ano = /^[1-9]\d{3}$/.test(campo.value) ? Number(campo.value) : new Date().getFullYear();
+        decada = Math.floor(ano / 10) * 10;
+        mostrarAnos();
+        calendario.hidden = false;
+        botao.setAttribute('aria-expanded', 'true');
+        lista.querySelector('[aria-pressed="true"]')?.focus();
+    });
+
+    calendario.querySelectorAll('[data-decada]').forEach((controle) => {
+        controle.addEventListener('click', () => {
+            decada += Number(controle.dataset.decada) * 10;
+            mostrarAnos();
+        });
+    });
+    document.addEventListener('click', (evento) => {
+        if (!envoltorio.contains(evento.target)) fecharCalendario();
+    });
+    envoltorio.addEventListener('focusout', (evento) => {
+        if (!envoltorio.contains(evento.relatedTarget)) fecharCalendario();
+    });
+    envoltorio.addEventListener('keydown', (evento) => {
+        if (evento.key === 'Escape') {
+            fecharCalendario();
+            botao.focus();
+        }
+    });
 });
