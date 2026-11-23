@@ -1,10 +1,10 @@
 {# Carrega somente os vínculos selecionados; a busca consulta o servidor. #}
-<details class="relation-section" data-relation="{{ tipo }}" data-search-url="{{ path('catalog_options', {tipo: tipo}) }}">
+<details class="relation-section" data-relation="{{ tipo }}" data-search-url="{{ path(tipo ~ '_opcoes', {}) }}">
     <summary class="relation-heading">
         <span>{{ rotulo }} <span class="relation-count">{{ selecionados|length }}</span>
         </span>
         <span class="relation-actions">
-            <button class="btn btn-sm btn-outline-secondary quick-add-button" type="button" aria-label="Adicionar {{ singular }}" title="Adicionar {{ singular }}" data-quick-create="{{ tipo }}" data-title="Adicionar {{ singular }}" data-label="{{ tipo == 'autores' ? 'Nome' : 'Descrição' }}" data-field="{{ campo }}" data-max="{{ limite }}" data-url="{{ path('catalog_quick_create', {tipo: tipo}) }}" data-token="{{ csrf_token('save_' ~ tipo) }}">
+            <button class="btn btn-sm btn-outline-secondary quick-add-button" type="button" aria-label="Adicionar {{ singular }}" title="Adicionar {{ singular }}" data-quick-create="{{ tipo }}" data-title="Adicionar {{ singular }}" data-label="{{ tipo == 'autores' ? 'Nome' : 'Descrição' }}" data-field="{{ campo }}" data-max="{{ limite }}" data-url="{{ path(tipo ~ '_rapido', {}) }}" data-token="{{ csrf_token('save_' ~ tipo) }}">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
                     <path d="M12 5v14M5 12h14"/>
                 </svg>

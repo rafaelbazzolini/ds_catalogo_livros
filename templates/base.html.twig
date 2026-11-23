@@ -29,7 +29,7 @@
             <nav aria-label="Menu principal">
                 <a class="sidebar-link {{ app.request.attributes.get('_route') == 'home' ? 'active' : '' }}" href="{{ path('home') }}" {{ app.request.attributes.get('_route') == 'home' ? 'aria-current="page"' : '' }}>{{ icones.icon('dashboard') }}Dashboard</a>
                 {% for chave, rotulo in {livros: 'Livros', autores: 'Autores', assuntos: 'Assuntos'} %}
-                <a class="sidebar-link {{ tipo|default('') == chave ? 'active' : '' }}" href="{{ path('catalog_list', {tipo: chave}) }}" {{ tipo|default('') == chave ? 'aria-current="page"' : '' }}>{{ icones.icon(chave == 'livros' ? 'livros' : (chave == 'autores' ? 'autores' : 'assuntos')) }}{{ rotulo }}</a>
+                <a class="sidebar-link {{ tipo|default('') == chave ? 'active' : '' }}" href="{{ path(chave ~ '_lista') }}" {{ tipo|default('') == chave ? 'aria-current="page"' : '' }}>{{ icones.icon(chave == 'livros' ? 'livros' : (chave == 'autores' ? 'autores' : 'assuntos')) }}{{ rotulo }}</a>
                 {% endfor %}
                 <a class="sidebar-link {{ app.request.attributes.get('_route') == 'report' ? 'active' : '' }}" href="{{ path('report') }}" {{ app.request.attributes.get('_route') == 'report' ? 'aria-current="page"' : '' }}>{{ icones.icon('report') }}Relatório</a>
             </nav>
@@ -44,7 +44,7 @@
                     {% if metadados is defined %}
                     {% if id is defined %}
                     <li class="breadcrumb-item">
-                        <a href="{{ path('catalog_list', {tipo}) }}">{{ metadados.label }}</a>
+                        <a href="{{ path(tipo ~ '_lista') }}">{{ metadados.label }}</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">{{ id ? 'Editar' : 'Adicionar' }}</li>
                     {% else %}

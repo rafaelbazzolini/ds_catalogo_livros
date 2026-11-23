@@ -4,7 +4,7 @@
 {% block body %}
 <div class="list-heading">
     <h1>{{ metadados.label }}</h1>
-    <a class="btn btn-primary add-button" href="{{ path('catalog_new', {tipo}) }}">
+    <a class="btn btn-primary add-button" href="{{ path(tipo ~ '_novo') }}">
         <svg class="add-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M12 5v14M5 12h14"/>
         </svg>
@@ -18,7 +18,7 @@
             <input class="form-control search" id="search" name="q" value="{{ busca }}" placeholder="Pesquisar por descrição">
             <button class="btn btn-outline-secondary">Pesquisar</button>
             {% if busca %}
-            <a class="btn btn-link" href="{{ path('catalog_list', {tipo, porPagina}) }}">Limpar</a>
+            <a class="btn btn-link" href="{{ path(tipo ~ '_lista', {porPagina}) }}">Limpar</a>
             {% endif %}
         </div>
         <div class="list-options">
@@ -41,7 +41,7 @@
                 <tr>
                     <th>Código</th>
                     <th>Descrição</th>
-                    
+
                     <th class="text-end">Ações</th>
                 </tr>
             </thead>
@@ -50,15 +50,15 @@
                 <tr>
                     <td class="text-secondary">{{ attribute(registro, metadados.id) }}</td>
                     <td class="fw-semibold">{{ attribute(registro, metadados.field) }}</td>
-                    
+
                     <td>
                         <div class="d-flex justify-content-end gap-2">
-                            <a class="btn btn-sm btn-outline-secondary icon-button" href="{{ path('catalog_edit', {tipo, id: attribute(registro, metadados.id)}) }}" aria-label="Editar {{ attribute(registro, metadados.field) }}" title="Editar">
+                            <a class="btn btn-sm btn-outline-secondary icon-button" href="{{ path(tipo ~ '_editar', {id: attribute(registro, metadados.id)}) }}" aria-label="Editar {{ attribute(registro, metadados.field) }}" title="Editar">
                                 <svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                     <path d="m16 3 5 5M4 20l4.5-1L21 6.5a2.1 2.1 0 0 0-3-3L5.5 16Z"/>
                                 </svg>
                             </a>
-                            <form method="post" action="{{ path('catalog_delete', {tipo, id: attribute(registro, metadados.id)}) }}" onsubmit="return confirm('Excluir este cadastro? Esta ação não pode ser desfeita.')">
+                            <form method="post" action="{{ path(tipo ~ '_excluir', {id: attribute(registro, metadados.id)}) }}" onsubmit="return confirm('Excluir este cadastro? Esta ação não pode ser desfeita.')">
                                 <input type="hidden" name="_token" value="{{ csrf_token('delete_' ~ tipo ~ '_' ~ attribute(registro, metadados.id)) }}">
                                 <button class="btn btn-sm btn-outline-danger icon-button" aria-label="Excluir {{ attribute(registro, metadados.field) }}" title="Excluir">
                                     <svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -85,7 +85,7 @@
             <ul class="pagination pagination-sm mb-0">
                 <li class="page-item {{ pagina == 1 ? 'disabled' : '' }}">
                     {% if pagina > 1 %}
-                    <a class="page-link" href="{{ path('catalog_list', {tipo, q: busca, porPagina, pagina: pagina - 1}) }}">Anterior</a>
+                    <a class="page-link" href="{{ path(tipo ~ '_lista', {q: busca, porPagina, pagina: pagina - 1}) }}">Anterior</a>
                     {% else %}
                     <span class="page-link" aria-disabled="true">Anterior</span>
                     {% endif %}
@@ -96,7 +96,7 @@
                     {% if numero == pagina %}
                     <span class="page-link" aria-current="page">{{ numero }}</span>
                     {% else %}
-                    <a class="page-link" href="{{ path('catalog_list', {tipo, q: busca, porPagina, pagina: numero}) }}">{{ numero }}</a>
+                    <a class="page-link" href="{{ path(tipo ~ '_lista', {q: busca, porPagina, pagina: numero}) }}">{{ numero }}</a>
                     {% endif %}
                 </li>
                 {% elseif numero == pagina - 3 or numero == pagina + 3 %}
@@ -107,7 +107,7 @@
                 {% endfor %}
                 <li class="page-item {{ pagina == paginas ? 'disabled' : '' }}">
                     {% if pagina < paginas %}
-                    <a class="page-link" href="{{ path('catalog_list', {tipo, q: busca, porPagina, pagina: pagina + 1}) }}">Próxima</a>
+                    <a class="page-link" href="{{ path(tipo ~ '_lista', {q: busca, porPagina, pagina: pagina + 1}) }}">Próxima</a>
                     {% else %}
                     <span class="page-link" aria-disabled="true">Próxima</span>
                     {% endif %}

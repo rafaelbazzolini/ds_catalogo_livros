@@ -97,7 +97,7 @@ sql/vw_livros_por_autor.sql
 ## 8. Validar PHP
 
 ```sh
-docker compose --env-file .env.local -f compose.avaliacao.yaml exec app php -l src/Controller/CatalogoController.php
+docker compose --env-file .env.local -f compose.avaliacao.yaml exec app sh -c 'for arquivo in src/Controller/*.php; do php -l "$arquivo"; done'
 
 docker compose --env-file .env.local -f compose.avaliacao.yaml exec app php -l src/Service/Catalogo.php
 

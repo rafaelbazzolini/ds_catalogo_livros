@@ -9,7 +9,7 @@
     <div>
         <h1>Dashboard</h1>
     </div>
-    <a class="btn btn-primary add-button" href="{{ path('catalog_new', {tipo: 'livros'}) }}">
+    <a class="btn btn-primary add-button" href="{{ path('livros_novo') }}">
         <span aria-hidden="true">+</span> Adicionar livro</a>
 </div>
 <div class="dashboard-stats">
@@ -19,7 +19,7 @@
     {rotulo: 'Autores', value: totais.autores, icon: 'autores', tipo: 'autores'},
     {rotulo: 'Assuntos', value: totais.assuntos, icon: 'assuntos', tipo: 'assuntos'}
     ] %}
-    <a class="panel stat-card" href="{{ path('catalog_list', {tipo: indicador.tipo}) }}">
+    <a class="panel stat-card" href="{{ path(indicador.tipo ~ '_lista') }}">
         <div class="stat-top">
             <span>{{ indicador.rotulo }}</span>
             <span class="stat-icon">{{ icones.icon(indicador.icon) }}</span>
