@@ -46,11 +46,11 @@
         </div>
         <div class="col-md-4 mb-3">
             <label class="form-label" for="year">Ano de publicação</label>
-            <input class="form-control" id="year" name="AnoPublicacao" inputmode="numeric" pattern="[1-9][0-9]{3}" maxlength="4" value="{{ dados.AnoPublicacao|default('') }}" required>
+            <input class="form-control" id="year" name="AnoPublicacao" inputmode="numeric" data-ano pattern="[1-9][0-9]{3}" maxlength="4" placeholder="Ex.: 2026" value="{{ dados.AnoPublicacao|default('') }}" required>
         </div>
         <div class="col-md-4 mb-3">
             <label class="form-label" for="price">Valor (R$)</label>
-            <input class="form-control" id="price" name="Valor" inputmode="decimal" placeholder="0,00" value="{{ dados.Valor|default('') }}" required>
+            <input class="form-control" id="price" name="Valor" inputmode="numeric" data-moeda placeholder="0,00" value="{{ dados.Valor|default('') }}" required>
             <div class="form-text">Exemplo: 1.234,56</div>
         </div>
     </div>

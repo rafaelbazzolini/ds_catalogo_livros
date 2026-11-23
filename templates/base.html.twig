@@ -5,18 +5,11 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>
-            {% block title %}Catálogo de livros{% endblock %}
+            {% block title %}Crud de livros{% endblock %}
         </title>
-        <link rel="stylesheet" href="/assets/bootstrap.min.css">
-        <link rel="stylesheet" href="/assets/app.css">
-        <script src="/assets/seletor.js" defer>
-        </script>
-        <script src="/assets/navegacao.js" defer>
-        </script>
-        <script src="/assets/seletor-relacionamentos.js" defer>
-        </script>
-        <script src="/assets/cadastro-rapido.js" defer>
-        </script>
+        <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/assets/css/app.css">
+        <script src="/assets/js/main.js" defer></script>
     </head>
     <body>
         <header class="topbar border-bottom bg-white">
@@ -65,7 +58,7 @@
             </nav>
             {% for tipo, mensagens in app.flashes %}
             {% for mensagem in mensagens %}
-            <div class="alert alert-{{ tipo }}" role="status">{{ mensagem }}</div>
+            <div class="alert alert-{{ tipo }}" role="status" data-notificacao>{{ mensagem }}</div>
             {% endfor %}
             {% endfor %}
             {% block body %}
