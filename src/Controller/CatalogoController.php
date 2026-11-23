@@ -19,7 +19,7 @@ class CatalogoController extends AbstractController
     public function home(Catalogo $catalogo): Response
     {
         // Os totais não dependem dos vínculos entre livros e autores.
-        return $this->render('painel.html.twig', $catalogo->dashboard());
+        return $this->render('painel/index.html.twig', $catalogo->dashboard());
     }
 
     #[Route(
@@ -41,10 +41,14 @@ class CatalogoController extends AbstractController
                 $requisicao->query->getInt('porPagina', 10)
             );
         } catch (ConnectionException) {
-            return $this->render('indisponivel.html.twig', status: Response::HTTP_SERVICE_UNAVAILABLE);
+            return $this->render('erros/indisponivel.html.twig', status: Response::HTTP_SERVICE_UNAVAILABLE);
         }
 
-        return $this->render('catalogo/lista.html.twig', [
+        return $this->render(match ($tipo) {
+            'livros' => 'livro/lista.html.twig',
+            'autores' => 'autor/lista.html.twig',
+            'assuntos' => 'assunto/lista.html.twig',
+        }, [
             ...$resultado,
             'tipo' => $tipo,
             'metadados' => Catalogo::TYPES[$tipo],
@@ -110,7 +114,11 @@ class CatalogoController extends AbstractController
             }
         }
 
-        return $this->render('catalogo/formulario.html.twig', [
+        return $this->render(match ($tipo) {
+            'livros' => 'livro/formulario.html.twig',
+            'autores' => 'autor/formulario.html.twig',
+            'assuntos' => 'assunto/formulario.html.twig',
+        }, [
             'tipo' => $tipo,
             'metadados' => Catalogo::TYPES[$tipo],
             'dados' => $dados,

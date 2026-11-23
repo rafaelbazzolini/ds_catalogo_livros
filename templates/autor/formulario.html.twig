@@ -1,0 +1,41 @@
+{# Criação e edição compartilham os mesmos campos. #}
+{% extends 'base.html.twig' %}
+{% block body %}
+<div class="form-heading">
+    <a class="btn btn-outline-secondary back-button" href="{{ path('catalog_list', {tipo}) }}">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m12 5-7 7 7 7M5 12h14"/>
+        </svg>{{ metadados.label }}</a>
+    <h1>{{ id ? 'Editar' : 'Adicionar' }} autor</h1>
+</div>
+{% if erros %}
+<div class="alert alert-danger" role="alert">
+    <strong>Confira os campos informados.</strong>
+    <ul class="mb-0">
+        {% for erro in erros %}
+        <li>{{ erro }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+<form method="post" class="panel p-4 edit-form">
+    <input type="hidden" name="_token" value="{{ csrf_token('save_' ~ tipo) }}">
+    <p class="small text-secondary">Todos os campos são obrigatórios.</p>
+    <div class="mb-3">
+        <label for="main" class="form-label">Nome</label>
+        <input id="main" class="form-control" name="{{ metadados.field }}" value="{{ attribute(dados, metadados.field)|default('') }}" maxlength="{{ metadados.max }}" required autofocus>
+    </div>
+    
+    <div class="d-flex gap-2 border-top pt-3">
+        <button class="btn btn-primary save-button">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12l4 4v12a2 2 0 0 1-2 2Z"/>
+                <path d="M7 3v6h10V3M7 21v-8h10v8"/>
+            </svg>
+            <span>Salvar</span>
+        </button>
+        <a class="btn btn-outline-secondary" href="{{ path('catalog_list', {tipo}) }}">Cancelar</a>
+    </div>
+</form>
+
+{% endblock %}

@@ -15,7 +15,7 @@
     <form class="list-toolbar" method="get">
         <div class="search-controls">
             <label class="visually-hidden" for="search">Pesquisar</label>
-            <input class="form-control search" id="search" name="q" value="{{ busca }}" placeholder="Pesquisar por {{ tipo == 'livros' ? 'título' : (tipo == 'autores' ? 'nome' : 'descrição') }}">
+            <input class="form-control search" id="search" name="q" value="{{ busca }}" placeholder="Pesquisar por nome">
             <button class="btn btn-outline-secondary">Pesquisar</button>
             {% if busca %}
             <a class="btn btn-link" href="{{ path('catalog_list', {tipo, porPagina}) }}">Limpar</a>
@@ -40,13 +40,8 @@
             <thead>
                 <tr>
                     <th>Código</th>
-                    <th>{{ tipo == 'livros' ? 'Título' : (tipo == 'autores' ? 'Nome' : 'Descrição') }}</th>
-                    {% if tipo == 'livros' %}
-                    <th>Editora</th>
-                    <th>Ano</th>
-                    <th class="text-end">Valor</th>
-                    <th>Status</th>
-                    {% endif %}
+                    <th>Nome</th>
+                    
                     <th class="text-end">Ações</th>
                 </tr>
             </thead>
@@ -55,14 +50,7 @@
                 <tr>
                     <td class="text-secondary">{{ attribute(registro, metadados.id) }}</td>
                     <td class="fw-semibold">{{ attribute(registro, metadados.field) }}</td>
-                    {% if tipo == 'livros' %}
-                    <td>{{ registro.Editora }}</td>
-                    <td>{{ registro.AnoPublicacao }}</td>
-                    <td class="text-end text-nowrap">R$ {{ registro.Valor|number_format(2, ',', '.') }}</td>
-                    <td>
-                        <span class="status-badge {{ registro.Status == 'disponivel' ? 'is-available' : 'is-unavailable' }}">{{ registro.Status == 'disponivel' ? 'Disponível' : 'Indisponível' }}</span>
-                    </td>
-                    {% endif %}
+                    
                     <td>
                         <div class="d-flex justify-content-end gap-2">
                             <a class="btn btn-sm btn-outline-secondary icon-button" href="{{ path('catalog_edit', {tipo, id: attribute(registro, metadados.id)}) }}" aria-label="Editar {{ attribute(registro, metadados.field) }}" title="Editar">
@@ -83,7 +71,7 @@
                 </tr>
                 {% else %}
                 <tr>
-                    <td colspan="{{ tipo == 'livros' ? 7 : 3 }}" class="text-center text-secondary py-5">Nenhum registro encontrado. Use o botão acima para cadastrar.</td>
+                    <td colspan="3" class="text-center text-secondary py-5">Nenhum registro encontrado. Use o botão acima para cadastrar.</td>
                 </tr>
                 {% endfor %}
             </tbody>

@@ -6,7 +6,7 @@
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="m12 5-7 7 7 7M5 12h14"/>
         </svg>{{ metadados.label }}</a>
-    <h1>{{ id ? 'Editar' : 'Adicionar' }} {{ tipo == 'livros' ? 'livro' : (tipo == 'autores' ? 'autor' : 'assunto') }}</h1>
+    <h1>{{ id ? 'Editar' : 'Adicionar' }} livro</h1>
 </div>
 {% if erros %}
 <div class="alert alert-danger" role="alert">
@@ -22,10 +22,10 @@
     <input type="hidden" name="_token" value="{{ csrf_token('save_' ~ tipo) }}">
     <p class="small text-secondary">Todos os campos são obrigatórios.</p>
     <div class="mb-3">
-        <label for="main" class="form-label">{{ tipo == 'livros' ? 'Título' : (tipo == 'autores' ? 'Nome' : 'Descrição') }}</label>
+        <label for="main" class="form-label">Titulo</label>
         <input id="main" class="form-control" name="{{ metadados.field }}" value="{{ attribute(dados, metadados.field)|default('') }}" maxlength="{{ metadados.max }}" required autofocus>
     </div>
-    {% if tipo == 'livros' %}
+    
     <div class="row">
         <div class="col-md-8 mb-3">
             <label class="form-label" for="publisher">Editora</label>
@@ -69,10 +69,10 @@
         </div>
     </div>
     <div class="relation-groups">
-        {% include 'catalogo/seletor_relacionamentos.html.twig' with {tipo: 'autores', rotulo: 'Autores', singular: 'autor', campo: 'Nome', identificador: 'CodAu', limite: 40, selecionados: autores} %}
-        {% include 'catalogo/seletor_relacionamentos.html.twig' with {tipo: 'assuntos', rotulo: 'Assuntos', singular: 'assunto', campo: 'Descricao', identificador: 'codAs', limite: 20, selecionados: assuntos} %}
+        {% include 'livro/seletor_relacionamentos.html.twig' with {tipo: 'autores', rotulo: 'Autores', singular: 'autor', campo: 'Nome', identificador: 'CodAu', limite: 40, selecionados: autores} %}
+        {% include 'livro/seletor_relacionamentos.html.twig' with {tipo: 'assuntos', rotulo: 'Assuntos', singular: 'assunto', campo: 'Descricao', identificador: 'codAs', limite: 20, selecionados: assuntos} %}
     </div>
-    {% endif %}
+    
     <div class="d-flex gap-2 border-top pt-3">
         <button class="btn btn-primary save-button">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -84,7 +84,7 @@
         <a class="btn btn-outline-secondary" href="{{ path('catalog_list', {tipo}) }}">Cancelar</a>
     </div>
 </form>
-{% if tipo == 'livros' %}
-{% include 'catalogo/cadastro_rapido.html.twig' %}
-{% endif %}
+
+{% include 'componentes/cadastro_rapido.html.twig' %}
+
 {% endblock %}
