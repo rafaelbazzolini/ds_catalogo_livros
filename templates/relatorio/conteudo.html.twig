@@ -2,7 +2,17 @@
 {% for grupo in grupos %}
 <section class="author-group">
     <h2>{{ grupo.name }}</h2>
-    <table class="table">
+    <div class="table-responsive">
+    <table class="table tabela-relatorio" style="table-layout: fixed; width: 100%;">
+        <colgroup>
+            <col style="width: 22%;">
+            <col style="width: 17%;">
+            <col style="width: 7%;">
+            <col style="width: 8%;">
+            <col style="width: 22%;">
+            <col style="width: 13%;">
+            <col style="width: 11%;">
+        </colgroup>
         <thead>
             <tr>
                 <th>Livro</th>
@@ -28,6 +38,7 @@
             {% endfor %}
         </tbody>
     </table>
+    </div>
     <p class="small text-secondary">{{ grupo.livros|length }} livro(s) vinculado(s) ao autor</p>
 </section>
 {% else %}

@@ -232,7 +232,7 @@ document.querySelectorAll('[data-relation]').forEach((secao) => {
             const dados = await resposta.json();
             if (idRequisicao !== sequencia) return;
             pagina = proximaPagina;
-            itens = acrescentar ? [...items, ...data.items.filter((item) => !itens.some((existente) => existente.id === item.id))] : dados.items;
+            itens = acrescentar ? [...itens, ...dados.items.filter((item) => !itens.some((existente) => existente.id === item.id))] : dados.items;
             renderizarResultados();
             retorno.textContent = itens.length ? '' : 'Nenhum resultado encontrado.';
             botaoMais.textContent = 'Carregar mais';
@@ -250,6 +250,9 @@ document.querySelectorAll('[data-relation]').forEach((secao) => {
     }
 
     entrada.addEventListener('focus', () => carregar());
+    entrada.addEventListener('click', () => {
+        if (listaSuspensa.hidden) carregar();
+    });
     entrada.addEventListener('input', () => {
         clearTimeout(temporizador);
         controlador?.abort();
@@ -280,7 +283,7 @@ document.querySelectorAll('[data-relation]').forEach((secao) => {
         if (!secao.contains(evento.relatedTarget)) fechar();
     });
     document.addEventListener('click', (evento) => {
-        if (!secao.contains(evento.target)) fechar();
+        if (!evento.composedPath().includes(secao)) fechar();
     });
     secao.addEventListener('toggle', () => { if (!secao.open) fechar(); });
     secao.addEventListener('relation:add', (evento) => {
@@ -398,9 +401,15 @@ document.querySelectorAll('[data-notificacao]').forEach((notificacao) => {
 });
 
 document.querySelectorAll('[data-ano]').forEach((campo) => {
+    const anoAtual = Number(new Intl.DateTimeFormat('en', {year: 'numeric', timeZone: 'America/Sao_Paulo'}).format(new Date()));
+    function validarAno() {
+        campo.setCustomValidity(Number(campo.value) > anoAtual ? 'O ano de publicação não pode ser maior que o ano atual.' : '');
+    }
     campo.addEventListener('input', () => {
         campo.value = campo.value.replace(/\D/g, '').slice(0, 4);
+        validarAno();
     });
+    validarAno();
 
     const envoltorio = campo.closest('.campo-ano');
     if (!envoltorio) return;
@@ -421,6 +430,7 @@ document.querySelectorAll('[data-ano]').forEach((campo) => {
             const opcao = document.createElement('button');
             opcao.type = 'button';
             opcao.textContent = ano;
+            opcao.disabled = ano > anoAtual;
             opcao.setAttribute('aria-pressed', String(ano === Number(campo.value)));
             opcao.addEventListener('click', () => {
                 campo.value = ano;
@@ -432,7 +442,7 @@ document.querySelectorAll('[data-ano]').forEach((campo) => {
             lista.append(opcao);
         }
         calendario.querySelector('[data-decada="-1"]').disabled = decada <= 1000;
-        calendario.querySelector('[data-decada="1"]').disabled = decada >= 9990;
+        calendario.querySelector('[data-decada="1"]').disabled = decada + 10 > anoAtual;
     }
 
     botao.addEventListener('click', () => {
@@ -440,7 +450,7 @@ document.querySelectorAll('[data-ano]').forEach((campo) => {
             fecharCalendario();
             return;
         }
-        const ano = /^[1-9]\d{3}$/.test(campo.value) ? Number(campo.value) : new Date().getFullYear();
+        const ano = /^[1-9]\d{3}$/.test(campo.value) ? Math.min(Number(campo.value), anoAtual) : anoAtual;
         decada = Math.floor(ano / 10) * 10;
         mostrarAnos();
         calendario.hidden = false;

@@ -42,6 +42,15 @@ class CatalogoValidatorTest extends TestCase
         }
     }
 
+    public function testRejectsFutureYearAndAcceptsCurrentYear(): void
+    {
+        $anoAtual = (int) (new \DateTimeImmutable('now', new \DateTimeZone('America/Sao_Paulo')))->format('Y');
+        $dados = array_replace($this->book(), ['AnoPublicacao' => (string) ($anoAtual + 1)]);
+        self::assertSame(['O ano de publicação não pode ser maior que o ano atual.'], (new CatalogoValidator())->validate('livros', $dados));
+        $dados = array_replace($this->book(), ['AnoPublicacao' => (string) $anoAtual]);
+        self::assertSame([], (new CatalogoValidator())->validate('livros', $dados));
+    }
+
     private function book(): array
     {
         return ['Status' => 'disponivel', 'Titulo' => 'Dom Casmurro', 'Editora' => 'Companhia das Letras', 'Edicao' => '1', 'AnoPublicacao' => '1899', 'Valor' => '1.234,56', 'autores' => ['1', '2'], 'assuntos' => ['1']];

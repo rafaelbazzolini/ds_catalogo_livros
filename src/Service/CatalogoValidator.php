@@ -26,6 +26,8 @@ class CatalogoValidator
         }
         if (!preg_match('/^[1-9][0-9]{3}$/D', (string) ($dados['AnoPublicacao'] ?? ''))) {
             $erros[] = 'Informe o ano de publicação com quatro dígitos.';
+        } elseif ((int) $dados['AnoPublicacao'] > (int) (new \DateTimeImmutable('now', new \DateTimeZone('America/Sao_Paulo')))->format('Y')) {
+            $erros[] = 'O ano de publicação não pode ser maior que o ano atual.';
         }
         $valorMonetario = trim((string) ($dados['Valor'] ?? ''));
         if (!preg_match('/^(?:[0-9]{1,8}|[0-9]{1,2}(?:\.[0-9]{3}){1,2}),[0-9]{2}$/D', $valorMonetario)) {
